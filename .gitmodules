@@ -1,0 +1,3 @@
+[submodule "third-party/serial_cpp"]
+	path = third-party/serial_cpp
+	url = https://github.com/gbionics/serial_cpp.git
