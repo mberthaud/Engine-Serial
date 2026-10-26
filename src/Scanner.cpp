@@ -34,7 +34,6 @@ void Scanner::poll_scanner(stop_token stop_token)
                 try
                 {
                     on_read(scanner_data);
-                    break;
                 }
                 catch (const std::exception& e)
                 {

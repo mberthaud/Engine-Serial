@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../../bindings/csbindings/csbindings.csproj" />
+  <Project Path="cstest.csproj" />
+</Solution>

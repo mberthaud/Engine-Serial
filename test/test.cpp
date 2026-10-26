@@ -8,7 +8,7 @@
 void some_user_func(span<const uint8_t> data)
 {
     string x = Scanner::as_string(data);
-    std::cout << "caller got the data of " << x << std::endl;
+    std::cout << "recv from scanner: " << x << std::endl;
 }
 
 int main()

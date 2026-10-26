@@ -11,9 +11,10 @@ set(serial_cpp_INSTALL OFF)
 add_subdirectory(third-party/serial_cpp)
 
 # Library
-add_library(MySerial STATIC
+add_library(MySerial SHARED
     src/Scanner.cpp
-    bindings/c/scanner_c.c
+    src/ScannerC.cpp
+    include/ScannerC.hpp
     include/Scanner.hpp)
 
 target_compile_features(MySerial PUBLIC cxx_std_20)
@@ -21,7 +22,6 @@ target_compile_features(MySerial PUBLIC cxx_std_20)
 
 target_include_directories(MySerial PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/
 )
 
 target_link_libraries(MySerial PUBLIC
@@ -29,15 +29,15 @@ target_link_libraries(MySerial PUBLIC
 )
 
 # example executable to test stuff
-add_executable(Example
-    example/example.cpp
+add_executable(Test
+    test/test.cpp
 )
 
-target_link_libraries(Example PRIVATE
+target_link_libraries(Test PRIVATE
     MySerial
 )
 
-set_target_properties(MySerial Example PROPERTIES
+set_target_properties(MySerial Test PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
