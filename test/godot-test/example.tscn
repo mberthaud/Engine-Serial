@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://lb4edrimo881"]
 
-[ext_resource type="Script" uid="uid://cs5wrhbfptocc" path="res://testScan.cs" id="1_2jas5"]
+[ext_resource type="Script" uid="uid://dtqu5uo2ldgq8" path="res://gdscanner.gd" id="2_n51mc"]
 
 [node name="Node2D" type="Node2D" unique_id=488482758]
 
-[node name="testScan" type="Node" parent="." unique_id=473191668]
-script = ExtResource("1_2jas5")
-metadata/_custom_type_script = "uid://cs5wrhbfptocc"
+[node name="ScannerTest" type="Node" parent="." unique_id=349925883]
+script = ExtResource("2_n51mc")
+metadata/_custom_type_script = "uid://dtqu5uo2ldgq8"
