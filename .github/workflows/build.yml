@@ -45,3 +45,58 @@ jobs:
           name: MySerial-${{ matrix.name }}
           path: ${{ matrix.artifact }}
           if-no-files-found: error
+
+  gdextension:
+    name: GDExtension ${{ matrix.name }} ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [Windows, Linux, macOS]
+        target: [template_debug, template_release]
+        include:
+          - name: Windows
+            os: windows-latest
+          - name: Linux
+            os: ubuntu-latest
+          - name: macOS
+            os: macos-26
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -S bindings/godot -B build-gd -DCMAKE_BUILD_TYPE=Release -DGODOTCPP_TARGET=${{ matrix.target }}
+
+      - name: Build
+        run: cmake --build build-gd --config Release --parallel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gdextension-${{ matrix.name }}-${{ matrix.target }}
+          path: |
+            bindings/godot/addons/serial_scanner/bin/*.dll
+            bindings/godot/addons/serial_scanner/bin/*.so
+            bindings/godot/addons/serial_scanner/bin/*.dylib
+          if-no-files-found: error
+
+  gdextension-distributions:
+    name: GDExtension addon
+    needs: gdextension
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: gdextension-*
+          path: bindings/godot/addons/serial_scanner/bin
+          merge-multiple: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: serial_scanner-addon
+          path: bindings/godot/addons
+          if-no-files-found: error
