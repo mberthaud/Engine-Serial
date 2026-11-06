@@ -1,4 +1,5 @@
 #include <Scanner.hpp>
+#include <cctype>
 #include <exception>
 #include <iostream>
 #include <ostream>
@@ -20,25 +21,29 @@ void Scanner::poll_scanner(stop_token stop_token)
     vector<uint8_t> buf = vector<uint8_t>(1024);
     while (!stop_token.stop_requested())
     {
-        if (serial_port.waitReadable())
+        size_t bytes = serial_port.available();
+        if (bytes == 0)
         {
-            size_t bytes = serial_port.available();
-            if (bytes > buf.size())
+            this_thread::sleep_for(chrono::milliseconds(5));
+            continue;
+        }
+
+        if (bytes > buf.size())
+        {
+            buf.resize(bytes * 2);
+        }
+
+        size_t bytes_read = serial_port.read(buf.data(), bytes);
+        if (bytes_read > 0)
+        {
+            std::span scanner_data(buf.data(), bytes_read);
+            try
             {
-                buf.resize(bytes * 2);
+                on_read(scanner_data);
             }
-            size_t bytes_read = serial_port.read(buf.data(), bytes);
-            if (bytes_read > 0)
+            catch (const std::exception& e)
             {
-                std::span scanner_data(buf.data(), bytes_read);
-                try
-                {
-                    on_read(scanner_data);
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << e.what() << std::endl;
-                }
+                std::cerr << e.what() << std::endl;
             }
         }
     }
