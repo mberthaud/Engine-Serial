@@ -15,14 +15,17 @@ jobs:
       matrix:
         include:
           - name: Windows
+            package: csharp-windows
             os: windows-latest
             cmake_args: ""
             artifact: Build/Release/MySerial.dll
           - name: Linux
+            package: csharp-linux
             os: ubuntu-latest
             cmake_args: ""
             artifact: Build/libMySerial.so
           - name: macOS
+            package: csharp-macos
             os: macos-26
             #I dont think we need x86 since silicon macs are ARM but all runners I see included so 
             #I did too
@@ -40,10 +43,15 @@ jobs:
       - name: Build
         run: cmake --build Build --config Release --parallel
 
+      - name: Package
+        run: |
+          cmake -E make_directory package
+          cmake -E copy ${{ matrix.artifact }} bindings/csbindings/Scanner.cs bindings/csbindings/ScannerBindings.cs package
+
       - uses: actions/upload-artifact@v4
         with:
-          name: MySerial-${{ matrix.name }}
-          path: ${{ matrix.artifact }}
+          name: ${{ matrix.package }}
+          path: package
           if-no-files-found: error
 
   gdextension:
