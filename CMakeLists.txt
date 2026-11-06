@@ -19,6 +19,8 @@ add_library(MySerial SHARED
 
 target_compile_features(MySerial PUBLIC cxx_std_20)
 
+set_target_properties(MySerial PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 
 target_include_directories(MySerial PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -41,5 +43,4 @@ set_target_properties(MySerial Test PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF
-    WINDOWS_EXPORT_ALL_SYMBOLS ON
 )
