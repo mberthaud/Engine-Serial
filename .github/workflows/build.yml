@@ -1,0 +1,47 @@
+name: Build-libraries
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+            cmake_args: ""
+            artifact: Build/Release/MySerial.dll
+          - name: Linux
+            os: ubuntu-latest
+            cmake_args: ""
+            artifact: Build/libMySerial.so
+          - name: macOS
+            os: macos-26
+            #I dont think we need x86 since silicon macs are ARM but all runners I see included so 
+            #I did too
+            cmake_args: -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+            artifact: Build/libMySerial.dylib
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -S . -B Build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmake_args }}
+
+      - name: Build
+        run: cmake --build Build --config Release --parallel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MySerial-${{ matrix.name }}
+          path: ${{ matrix.artifact }}
+          if-no-files-found: error

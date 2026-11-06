@@ -4,20 +4,22 @@
 #include <span>
 #include <string>
 #include <thread>
-using namespace std;
+
 class Scanner
 {
   public:
-    const string port_name;
+    const std::string port_name;
     static void get_scanner_ports();
     void stop();
-    static string as_string(const span<const uint8_t> data);
-    Scanner(string port_name, function<void(span<const uint8_t>)> callback);
+    static std::string as_string(const std::span<const uint8_t> data);
+    Scanner(std::string port_name, std::function<void(std::span<const uint8_t>)> callback,
+            std::function<void(const char*, const size_t)> error_callback);
     ~Scanner();
 
   private:
-    void poll_scanner(stop_token token);
+    void poll_scanner(std::stop_token token);
     serial_cpp::Serial serial_port;
-    function<void(const span<uint8_t>)> on_read;
-    jthread reader_thread;
+    std::function<void(const std::span<uint8_t>)> on_read;
+    std::function<void(const char*, const size_t)> on_error;
+    std::jthread reader_thread;
 };

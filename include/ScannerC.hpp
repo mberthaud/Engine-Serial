@@ -6,8 +6,10 @@
 #endif
 extern "C"
 {
-    typedef void (*ScannerCallback)(const uint8_t*, size_t);
-    SCANNER_API void* scanner_create(const char* str, ScannerCallback callback);
+    typedef void (*ScannerDataCallback)(const uint8_t*, const size_t);
+    typedef void (*ScannerErrorCallback)(const char*, const size_t);
+    SCANNER_API void* scanner_create(const char* str, ScannerDataCallback data_callback,
+                                     ScannerErrorCallback error_callback);
     SCANNER_API void scanner_destroy(Scanner* scanner);
     SCANNER_API void get_scanner_ports_c();
 }
