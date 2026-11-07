@@ -18,6 +18,11 @@ download the csharp plugin from the releases page for your OS. extract the zip a
 already have an addons folder in your godot project make one. 
 in your .csproj add  **<AllowUnsafeBlocks>true</AllowUnsafeBlocks>** the scanner bindings needs unsafe code to interface with the native library
 
+unlike unity that has a plugins folder, godot does not have a standard placed to look for native libraries to be loaded. as such add this line somewhere in your code. this will tell Godot to looks for the scanner .dll/.so/.dylib in the addons folder.
+```cs
+Scanner.NativeLibraryDirectory = "Addons/"
+```
+
 
 # Scanner Modes
 Each scanner comes with a configuration sheet that can adjust its modes
