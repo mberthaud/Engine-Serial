@@ -9,10 +9,16 @@ class Program
         Scanner.NativeLibraryDirectory = "../../build";
 
         var ports = Scanner.GetPorts();
+        if (ports.Length == 0)
+        {
+            Console.WriteLine("no scanners found");
+            return;
+        }
         foreach (var p in ports)
         {
             Console.WriteLine(p);
         }
+
 
         Scanner s = new Scanner(ports[0]);
         s.OnDataReceived += OnRead;
