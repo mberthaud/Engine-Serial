@@ -1,6 +1,6 @@
 [submodule "third-party/serial_cpp"]
 	path = third-party/serial_cpp
-	url = https://github.com/gbionics/serial_cpp.git
+	url = https://github.com/mberthaud/serial_cpp.git
 [submodule "bindings/godot/godot-cpp"]
 	path = bindings/godot/godot-cpp
 	url = https://github.com/godotengine/godot-cpp
