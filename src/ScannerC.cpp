@@ -33,7 +33,24 @@ void scanner_destroy(Scanner* scanner)
     delete scanner;
 }
 
-void get_scanner_ports_c()
+char** get_scanner_ports_c(size_t* count)
 {
-    Scanner::get_scanner_ports();
+    std::vector<std::string> ports = Scanner::get_scanner_ports();
+    char** result = new char*[ports.size()];
+    for (size_t i = 0; i < ports.size(); i++)
+    {
+        result[i] = new char[ports[i].size() + 1];
+        std::memcpy(result[i], ports[i].c_str(), ports[i].size() + 1);
+    }
+    *count = ports.size();
+    return result;
+}
+
+void free_scanner_ports_c(char** ports, size_t count)
+{
+    for (size_t i = 0; i < count; i++)
+    {
+        delete[] ports[i];
+    }
+    delete[] ports;
 }

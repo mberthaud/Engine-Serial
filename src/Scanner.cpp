@@ -1,4 +1,5 @@
 #include <Scanner.hpp>
+#include <algorithm>
 #include <cctype>
 #include <exception>
 #include <functional>
@@ -67,14 +68,20 @@ Scanner::~Scanner()
     stop();
 }
 
-void Scanner::get_scanner_ports()
+std::vector<std::string> Scanner::get_scanner_ports()
 {
-    //@TODO: all the scanners have the same description and hardware id on linux so we could filter
-    // this list down to only return to callers callers the ports we know are scanners.
-    // I dont know if thats the case on other platforms so leaving this as as stub for now...
-    std::vector<serial_cpp::PortInfo> devices_found = serial_cpp::list_ports();
-    for (const serial_cpp::PortInfo& device : devices_found)
+    //@NOTE: scanners report differently on windows vs unix
+    // Windows reports: "USB\VID_152A&PID_880F&..."
+    // macOS and Linux report "USB VID:PID=152a:880f ..."
+    std::vector<std::string> ports;
+    for (const serial_cpp::PortInfo& device : serial_cpp::list_ports())
     {
-        printf("(%s, %s, %s)\n", device.port.c_str(), device.description.c_str(), device.hardware_id.c_str());
+        std::string id = device.hardware_id;
+        std::ranges::transform(id, id.begin(), [](unsigned char c) { return std::tolower(c); });
+        if (id.find("vid_152a&pid_880f") != std::string::npos || id.find("vid:pid=152a:880f") != std::string::npos)
+        {
+            ports.push_back(device.port);
+        }
     }
+    return ports;
 }

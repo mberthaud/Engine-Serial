@@ -17,8 +17,13 @@ void some_user_error_func(const char* what, size_t len)
 
 int main()
 {
-    Scanner::get_scanner_ports();
-    Scanner s("/dev/cu.usbmodem00000000050C1", some_user_func, some_user_error_func);
+    std::vector<std::string> ports = Scanner::get_scanner_ports();
+    if (ports.empty())
+    {
+        std::cout << "no scanner found\n";
+        return 1;
+    }
+    Scanner s(ports[0], some_user_func, some_user_error_func);
     while (true)
     {
     }

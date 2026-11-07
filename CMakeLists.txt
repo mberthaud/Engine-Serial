@@ -31,15 +31,15 @@ target_link_libraries(MySerial PUBLIC
 )
 
 # example executable to test stuff
-add_executable(Test
-    test/test.cpp
+add_executable(Example
+    examples/example.cpp
 )
 
-target_link_libraries(Test PRIVATE
+target_link_libraries(Example PRIVATE
     MySerial
 )
 
-set_target_properties(MySerial Test PROPERTIES
+set_target_properties(MySerial Example PROPERTIES
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON
     CXX_EXTENSIONS OFF

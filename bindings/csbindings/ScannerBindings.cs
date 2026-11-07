@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 namespace Overwrite.Jam.Scanner
 {
@@ -8,7 +9,9 @@ namespace Overwrite.Jam.Scanner
         [DllImport("MySerial", EntryPoint = "scanner_destroy")]
         private extern static void DeleteScanner(ScannerHandle* handle);
         [DllImport("MySerial", EntryPoint = "get_scanner_ports_c")]
-        private extern static void GetScannerPorts();
+        private extern static byte** GetScannerPorts(UIntPtr* count);
+        [DllImport("MySerial", EntryPoint = "free_scanner_ports_c")]
+        private extern static void FreeScannerPorts(byte** ports, UIntPtr count);
 
         private struct ScannerHandle
         {

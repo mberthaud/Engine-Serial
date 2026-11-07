@@ -4,9 +4,19 @@ class Program
 {
     static void Main(string[] args)
     {
+
+        //@NOTE: this is to set the directory of where your .lib/.so/.dylib is.
         Scanner.NativeLibraryDirectory = "../../build";
-        Scanner s = new Scanner("/dev/cu.usbmodem00000000050C1");
+
+        var ports = Scanner.GetPorts();
+        foreach (var p in ports)
+        {
+            Console.WriteLine(p);
+        }
+
+        Scanner s = new Scanner(ports[0]);
         s.OnDataReceived += OnRead;
+        //@NOTE: just to hold the program
         while (true)
         {
         }

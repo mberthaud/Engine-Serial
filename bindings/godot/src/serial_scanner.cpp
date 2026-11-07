@@ -74,9 +74,9 @@ bool SerialScanner::is_open() const
 PackedStringArray SerialScanner::get_ports()
 {
     PackedStringArray ports;
-    for (const serial_cpp::PortInfo& info : serial_cpp::list_ports())
+    for (const std::string& port : Scanner::get_scanner_ports())
     {
-        ports.push_back(String::utf8(info.port.c_str()));
+        ports.push_back(String::utf8(port.c_str()));
     }
     return ports;
 }

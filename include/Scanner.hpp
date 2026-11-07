@@ -4,12 +4,13 @@
 #include <span>
 #include <string>
 #include <thread>
+#include <vector>
 
 class Scanner
 {
   public:
     const std::string port_name;
-    static void get_scanner_ports();
+    static std::vector<std::string> get_scanner_ports();
     void stop();
     static std::string as_string(const std::span<const uint8_t> data);
     Scanner(std::string port_name, std::function<void(std::span<const uint8_t>)> callback,

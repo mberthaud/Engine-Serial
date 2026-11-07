@@ -9,9 +9,14 @@ public partial class testScan : Node
     public override void _Ready()
     {
         Scanner.NativeLibraryDirectory = "addons/";
-        Scanner s = new Scanner("/dev/ttyACM0");
-        s.OnDataReceived += OnRead;
-        s.OnError += OnError;
+        var allPorts = Scanner.GetPorts();
+        if (allPorts.Length > 0)
+        {
+            Scanner s = new Scanner(allPorts[0]);
+            s.OnDataReceived += OnRead;
+            s.OnError += OnError;
+        }
+
     }
 
     static void OnRead(Span<byte> recv)

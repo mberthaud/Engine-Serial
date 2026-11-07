@@ -11,5 +11,7 @@ extern "C"
     SCANNER_API void* scanner_create(const char* str, ScannerDataCallback data_callback,
                                      ScannerErrorCallback error_callback);
     SCANNER_API void scanner_destroy(Scanner* scanner);
-    SCANNER_API void get_scanner_ports_c();
+
+    SCANNER_API char** get_scanner_ports_c(size_t* count);
+    SCANNER_API void free_scanner_ports_c(char** ports, size_t count);
 }

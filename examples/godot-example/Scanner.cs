@@ -57,6 +57,19 @@ namespace Overwrite.Jam.Scanner
             return Encoding.UTF8.GetString(data);
         }
 
+        public static string[] GetPorts()
+        {
+            UIntPtr count;
+            byte** ports = GetScannerPorts(&count);
+            string[] result = new string[(int)count.ToUInt64()];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = Marshal.PtrToStringUTF8((IntPtr)ports[i]);
+            }
+            FreeScannerPorts(ports, count);
+            return result;
+        }
+
         private void OnDataRecv(byte* data, int len)
         {
             OnDataReceived?.Invoke(new Span<byte>(data, len));
